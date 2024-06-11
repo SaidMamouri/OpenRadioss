@@ -175,6 +175,7 @@ C-----------------------------------------------
       USE MESSAGE_MOD
       USE NLOCAL_REG_MOD
       USE SENSOR_MOD
+      USE SIGEPS125C_MOD 
 C-----------------------------------------------
 C   I m p l i c i t   T y p e s
 C-----------------------------------------------
@@ -835,7 +836,7 @@ C---
 !               -------------------------------
 !               IGTYP /= 51 and 52 or ilaw/=58
 !               -------------------------------
-           IF (ILAW /= 1 .AND. ILAW /= 2 .AND. ILAW /= 32) THEN
+           IF (ILAW /= 1 .AND. ILAW /= 2 .AND. ILAW /= 32 ) THEN
             DO I=JFT,JLT
               ZT       = POSLY(I,IPT) *THK0(I)
               TENS(I,1)=EXX(I)+ZT*KXX(I)
@@ -912,13 +913,13 @@ C
                CALL ROTOV(JFT,JLT,TENS,DIRDMG,NEL)
              ENDIF
 C
-            IF (FLAG_EPS) THEN
+            IF (FLAG_EPS) THEN ! 
               DO I=JFT,JLT
                 EPSXX(I) = TENS(I,1)
                 EPSYY(I) = TENS(I,2)
                 EPSXY(I) = TWO*TENS(I,3)
                 EPSYZ(I) = TWO*TENS(I,4)
-                EPSZX(I) = TWO*TENS(I,5)         
+                EPSZX(I) = TWO*TENS(I,5)  
               ENDDO
             ENDIF
            ENDIF  ! IF (IGTYP ==51 .AND. ILAW == 58)
@@ -1694,6 +1695,17 @@ c
      8         EPSP     ,NFUNC    ,IFUNC    ,NPF      ,TF       ,
      9         NVARTMP  ,VARTMP   )
 c
+        ELSEIF (ILAW == 125) THEN     
+            CALL SIGEPS125C(
+     1         JLT      ,MATPARAM   , NUVAR   ,UVAR,
+     2         RHO      ,NGL       ,TT        ,
+     3         THKN     ,THKLYL     , SHF     , 
+     4         EPSXX    ,EPSYY    ,EPSXY      ,EPSYZ   ,EPSZX   ,
+     5         DEPSXX   ,DEPSYY   ,DEPSXY     ,
+     6         LBUF%SIG(IJ1),LBUF%SIG(IJ2)    ,
+     7         SIGNXX   ,SIGNYY   ,SIGNXY   ,SIGNYZ   ,SIGNZX   ,
+     8         OFF      ,SIGY     ,ETSE     ,SSP  )
+c     
           ELSEIF (ILAW == 158) THEN
 
             CALL SIGEPS158C(
