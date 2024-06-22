@@ -32,7 +32,7 @@ Chd|====================================================================
      .           UPARAM  ,IPM     ,NLAY    ,PM_STACK, ISUBSTACK,               
      .           STRC    ,AREA    ,IMAT    ,IPROP   ,DTEL    ,  
      .           X2L     ,X3L     ,X4L     ,Y2L     ,Y3L     ,Y4L    ,
-     .           IGEO_STACK       ,GROUP_PARAM)        
+     .           IGEO_STACK  ,GROUP_PARAM  ,NEL     , IZ)        
 C-----------------------------------------------
 C   M o d u l e s
 C-----------------------------------------------
@@ -54,7 +54,7 @@ C-----------------------------------------------
 C-----------------------------------------------
 C   D u m m y   A r g u m e n t s
 C-----------------------------------------------
-      INTEGER IMAT, IPROP
+      INTEGER IMAT, IPROP, NEL
       INTEGER IXC(NIXC,*),IGEO(NPROPGI,*),IHBE, SH4TREE(KSH4TREE,*),
      .   IPM(NPROPMI,*),NLAY,ISUBSTACK,IGEO_STACK(4*NPT_STACK+2,*)
 C     REAL
@@ -62,6 +62,7 @@ C     REAL
      .   PM(NPROPM,*), GEO(NPROPG,*),STIFN(*),STIFR(*),THK(*),ALDT(*),
      .   UPARAM(*),PM_STACK(20,*),STRC(*), DTEL(MVSIZ),
      .   X2L(MVSIZ),X3L(MVSIZ),X4L(MVSIZ),Y2L(MVSIZ),Y3L(MVSIZ),Y4L(MVSIZ)
+      my_real, DIMENSION(NEL), INTENT(IN) :: IZ
       TYPE(GROUP_PARAM_)  :: GROUP_PARAM
 C-----------------------------------------------
 C   L o c a l   V a r i a b l e s
@@ -354,7 +355,8 @@ C----------------------------------------------------------
              VV = VV*VV
              FAC = HALF*AREA(I)*THK(I) / VV
              STI = FAC * A11 
-             STIR = ONE_OVER_12*FAC*A11R*THK(I)**2
+             FAC = A11R*HALF*AREA(I)/ VV
+             STIR = FAC*IZ(I)
              STIFN(IXC(2,I))=STIFN(IXC(2,I))+STI
              STIFN(IXC(3,I))=STIFN(IXC(3,I))+STI
              STIFN(IXC(4,I))=STIFN(IXC(4,I))+STI
@@ -373,8 +375,9 @@ C----------------------------------------------------------
               VV = VISCMX * ALMIN(I)
               VV = VV*VV
               FAC = HALF*AREA(I)*THK(I) / VV
-              STI = FAC * A11 
-              STIR = ONE_OVER_12*FAC*A11R*THK(I)**2
+              STI = FAC * A11
+              FAC =  A11R*HALF*AREA(I) / VV
+              STIR = FAC*(IZ(I) - THK(I)*AREA(I)*ONE_OVER_12 ) ! ! as Fac*A11R*TH**2/12 (with out area)
               STIFN(IXC(2,I))=STIFN(IXC(2,I))+STI
               STIFN(IXC(3,I))=STIFN(IXC(3,I))+STI
               STIFN(IXC(4,I))=STIFN(IXC(4,I))+STI
@@ -413,8 +416,9 @@ C----------------------------------------------------------
                 VV = VISCMX * ALMIN(I)
                 VV = VV*VV
                 FAC = HALF*AREA(I)*THK(I) / VV
-                STI = FAC * A11 
-                STIR = ONE_OVER_12*FAC*A11R*THK(I)**2
+                STI = FAC * A11
+                FAC = A11R * HALF*AREA(I)/ VV
+                STIR = FAC*IZ(I)
                 STIFN(IXC(2,I))=STIFN(IXC(2,I))+STI
                 STIFN(IXC(3,I))=STIFN(IXC(3,I))+STI
                 STIFN(IXC(4,I))=STIFN(IXC(4,I))+STI
@@ -437,7 +441,8 @@ C----------------------------------------------------------
                 VV = VV*VV
                 FAC = HALF*AREA(I)*THK(I) / VV
                 STI = FAC * A11 
-                STIR = ONE_OVER_12*FAC*A11R*THK(I)**2
+                FAC =  A11R*HALF*AREA(I) / VV
+                STIR = FAC*IZ(I)
                 STIFN(IXC(2,I))=STIFN(IXC(2,I))+STI
                 STIFN(IXC(3,I))=STIFN(IXC(3,I))+STI
                 STIFN(IXC(4,I))=STIFN(IXC(4,I))+STI

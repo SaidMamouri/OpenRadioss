@@ -58,7 +58,8 @@ C-----------------------------------------------
      .        I1,I2,I3,MATLY,ICRYPT,NLAY,ILAY,IPANG,IPPID,IS,PIDS
       my_real 
      .   A11,A11R,C1,IZ,G,NU,A12,E,RHOG,B1T2, THICKT,SSP, THKLY,POSLY,
-     .   RHO,C1THK,A12THK,A1THK ,GTHK,NUTHK ,ETHK,RHOG0,RHOCPG,RHO0,RHOCP
+     .   RHO,C1THK,A12THK,A1THK ,GTHK,NUTHK ,ETHK,RHOG0,RHOCPG,RHO0,RHOCP,
+     .   F_OFFSET, ZSHIFT
 C      
 !!      TYPE (STACK_PLY) :: STACK          
 C-----------------------------------------------
@@ -185,6 +186,8 @@ C
              IPTHK  =  IPANG + NLAY ! layer thickness address ( NLAY = NPT )
              IPPOS  =  IPTHK + NLAY ! layer position address  ( NLAY = NPT )
              THICKT = ZERO
+             ZSHIFT = GEO(199,I)
+             F_OFFSET= ZSHIFT*ZSHIFT
              DO ILAY=1,NLAY
                THICKT =  GEO_STACK(1,IS)
                THKLY  = GEO_STACK(IPTHK  + ILAY,IS)*THICKT
@@ -215,7 +218,8 @@ C
               E = E/MAX(EM20,THICKT)
               A11 = A11/MAX(EM20,THICKT) 
               A12 = A12/MAX(EM20,THICKT)
-              IZ = ONE_OVER_12*THICKT**3
+              IZ = ONE_OVER_12*THICKT**3 
+              IZ = IZ + THICKT*F_OFFSET
               A11R =A11R/MAX(EM20, IZ)
               C1 = C1 /MAX(EM20,THICKT)
               G = G /MAX(EM20,THICKT)

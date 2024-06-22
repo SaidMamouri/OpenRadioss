@@ -78,7 +78,8 @@ Chd|====================================================================
      N           ISMSTR    ,IR        ,IS        ,NLAY      ,NPT        ,
      O           IXLAY     ,IXEL      ,ISUBSTACK ,STACK     ,
      P           F_DEF     ,ITASK     ,DRAPE     ,VARNL     ,NLOC_DMG   ,
-     R           INDX_DRAPE,THKE      ,SEDRAPE   ,NUMEL_DRAPE)
+     R           INDX_DRAPE,THKE      ,SEDRAPE   ,NUMEL_DRAPE           ,
+     S           IZ )
 C-----------------------------------------------
 C   M o d u l e s
 C----------------------------------------------- 
@@ -118,6 +119,7 @@ C-----------------------------------------------
      .   IGEO(NPROPGI,*),IPM(NPROPMI,*),IPARG(*),
      .   A11_IPLY(MVSIZ,*),ELCRKINI(*),FWAVE_EL(NEL)
       INTEGER , DIMENSION(SEDRAPE) :: INDX_DRAPE
+      my_real ,   DIMENSION(MVSIZ),  INTENT(IN)     ::        IZ
       my_real
      .   PM(NPROPM,*), GEO(NPROPG,*),TF(*),THK(*),EINT(JLT,*),FOR(NEL,5), 
      .   MOM(NEL,3),EPSP(*),GSTR(NEL,8),BUFMAT(*),G(*),A11(*),A12(*),VOL0(*),
@@ -252,7 +254,8 @@ c
      .              MAT      ,PID      ,THKLY    ,MATLY    ,POSLY    , 
      .              IGTYP    ,IXFEM    ,IXLAY    ,NLAY     ,NPT      ,   
      .              ISUBSTACK,STACK    ,DRAPE    ,NFT      ,THKE      ,
-     .              NEL      ,THK_LY   ,INDX_DRAPE,SEDRAPE ,NUMEL_DRAPE)
+     .              NEL      ,THK_LY   ,INDX_DRAPE,SEDRAPE ,NUMEL_DRAPE,
+     .              IZ )
 c
         CALL USERMAT_SHELL (ELBUF_STR  ,MAT_ELEM,
      1       JFT     ,JLT     ,NEL     ,PM      ,FOR     ,MOM     ,
@@ -283,7 +286,8 @@ c----------------------------
      .              MAT      ,PID      ,THKLY    ,MATLY    ,POSLY    , 
      .              IGTYP    ,IXFEM    ,IXLAY    ,NLAY     ,NPT      ,   
      .              ISUBSTACK,STACK    ,DRAPE    ,NFT     ,THKE       ,
-     .              NEL      ,THK_LY   ,INDX_DRAPE, SEDRAPE,NUMEL_DRAPE)
+     .              NEL      ,THK_LY   ,INDX_DRAPE, SEDRAPE,NUMEL_DRAPE,
+     .              IZ                  )
 c 
         CALL MULAWC(ELBUF_STR ,
      1       JFT     ,JLT     ,NEL     ,PM      ,FOR     ,MOM     ,

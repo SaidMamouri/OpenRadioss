@@ -149,7 +149,7 @@ C-----------------------------------------------
      .                             X1,X2,X3,X4,Y1,Y2,Y3,Y4,Z1,Z2,Z3,Z4,
      .                             E1X,E2X,E3X,E1Y,E2Y,E3Y,E1Z,E2Z,E3Z,
      .                             X2S,Y2S,X3S,Y3S,X4S,Y4S,
-     .                             X2L,X3L,X4L,Y2L,Y3L,Y4L
+     .                             X2L,X3L,X4L,Y2L,Y3L,Y4L,IZ
       my_real, DIMENSION(:) ,POINTER :: UVAR,DIR1,DIR2
       my_real, ALLOCATABLE, DIMENSION(:) :: DIR_A,DIR_B
       my_real, DIMENSION(:), ALLOCATABLE :: PHI1,PHI2,COOR1,COOR2,COOR3,COOR4
@@ -286,7 +286,7 @@ C------------
      .            BID    ,BID            ,ISUBSTACK ,NLAY  ,ELBUF_STR,
      .            STACK  ,GBUF%THK_I     ,RNOISE    ,DRAPE   ,
      .            PERTURB,IX1            ,IX2       ,IX3     ,IX4       ,
-     .            IDRAPE ,DRAPEG%INDX)
+     .            IDRAPE ,DRAPEG%INDX    ,IZ)
 C-----------------------------------------------
       CALL CDERII(PX1G,PX2G,PY1G,PY2G,
      .            X1  ,X2  ,X3  ,X4  ,Y1  ,Y2  , 
@@ -299,7 +299,7 @@ C-----------------------------------------------
      .            IPM     ,NLAY    ,STACK%PM,ISUBSTACK,STRC(NFT+1),
      .            AREA    ,IMAT    ,IPROP   ,
      .            X2L     ,X3L     ,X4L     ,Y2L     ,Y3L     ,Y4L ,
-     .            STACK%IGEO,GROUP_PARAM)
+     .            STACK%IGEO,GROUP_PARAM,   NEL      ,IZ)
       CALL C1BUF3(GEO,GBUF%THK,GBUF%OFF,THK,KSH4TREE,SH4TREE)
 C-----------------------------------------------
       IF (IXFEM > 0) THEN

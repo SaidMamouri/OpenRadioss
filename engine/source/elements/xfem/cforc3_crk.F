@@ -194,7 +194,7 @@ C
      .   DIE(MVSIZ),TEMPEL(MVSIZ),THEM(MVSIZ,4),
      .   UX1(MVSIZ),UX2(MVSIZ),UX3(MVSIZ),UX4(MVSIZ),
      .   UY1(MVSIZ),UY2(MVSIZ),UY3(MVSIZ),UY4(MVSIZ),A11R(MVSIZ),
-     .   THKE0(MVSIZ)
+     .   THKE0(MVSIZ),IZ(MVSIZ)
       my_real 
      .   BID,THKR
 C---
@@ -440,7 +440,7 @@ C-----------------------------
      N    ISMSTR    ,IR        ,IS        ,NLAYER    ,NPTT      ,
      O    IXLAY     ,IXEL      ,ISUBSTACK ,STACK     ,
      P    BID       ,ITASK     ,DRAPE_SH4N  ,VARNL     ,NLOC_DMG ,
-     R    INDX_DRAPE ,THKE, SEDRAPE  ,NUMEL_DRAPE)
+     R    INDX_DRAPE ,THKE, SEDRAPE  ,NUMEL_DRAPE  , IZ)
 C-----------------------------
         IF ((ITASK==0).AND.(IMON_MAT==1)) CALL STOPTIME(35,1)
 C-----------------------------

@@ -42,7 +42,8 @@ Chd|====================================================================
      .           MAT        ,PID        ,THKLY      ,MATLY      ,POSLY     ,
      .           IGTYP      ,IXFEM      ,IXLAY      ,NLAY       ,NPT       ,
      .           ISUBSTACK  ,STACK      ,DRAPE      ,NFT        ,THK       , 
-     .           NEL        ,RATIO_THKLY, INDX_DRAPE,SEDRAPE    , NUMEL_DRAPE)
+     .           NEL        ,RATIO_THKLY, INDX_DRAPE,SEDRAPE    , NUMEL_DRAPE,
+     .           IZ         )
 C-----------------------------------------------
 C   M o d u l e s
 C-----------------------------------------------
@@ -71,6 +72,7 @@ C-----------------------------------------------
       INTEGER MAT(*), PID(*), MATLY(*), IGEO(NPROPGI,*)
       my_real GEO(NPROPG,*),POSLY(MVSIZ,*),THKLY(*),RATIO_THKLY(NEL,*),
      .        THK(*)
+      my_real ,   DIMENSION(MVSIZ),  INTENT(OUT)     ::        IZ
       INTEGER, DIMENSION(SEDRAPE) :: INDX_DRAPE
       TYPE(ELBUF_STRUCT_), TARGET :: ELBUF_STR
       TYPE (STACK_PLY) :: STACK
@@ -83,7 +85,8 @@ C-----------------------------------------------
      .  IPID_LY,IPT_ALL,MAT_LAY,IDX,IE,NSLICE,IP,IDRAPE,IPOS
       my_real
      .   ZSHIFT,THK_NPTT,
-     .   THKL,POS_NPTT,POS_0,THICKT,THINNING,THK_LY(MVSIZ),POS_LY(MVSIZ)
+     .   THKL,POS_NPTT,POS_0,THICKT,THINNING,THK_LY(MVSIZ),POS_LY(MVSIZ),
+     .   FAC 
       my_real , DIMENSION(:,:),ALLOCATABLE ::  THK_IT
 C-----------------------------------------------
       TYPE (DRAPE_PLY_), POINTER  :: DRAPE_PLY
@@ -164,6 +167,7 @@ C=======================================================================
       ELSE 
           ALLOCATE(THK_IT(0,0))
       ENDIF 
+      IZ(1:NEL) = ZERO
 c
 c---------------------------------------------------------
       IF (IXFEM == 1 .and. IXLAY > 0) THEN  ! traitement des elements fantomes
@@ -208,7 +212,9 @@ C---
                    THK_IT(IT,I) = ONE/NPTT  !  THK_LY = ONE
                    THKLY(J)    = THK_IT(IT,I)                                   
                    MATLY(JMLY) = MAT_LY(I)    ! layer defined
-                   POSLY(I,IT) = ZERO                     
+                   POSLY(I,IT) = ZERO
+                   FAC =  THK(I)**3    
+                   IZ(I) = IZ(I) +   FAC*THK_IT(IT,I)*(THK_IT(IT,I)*THK_IT(IT,I)*ONE_OVER_12)                 
                 ENDDO                                                                                     
              ENDDO
           ELSEIF(IINT == 2)THEN
@@ -223,7 +229,9 @@ C---
                    THK_IT(IT,I) = HALF*W_GAUSS(IT,NPTT)  ! THK_LY = ONE
                    THKLY(J)    = THK_IT(IT,I)                                                          
                    MATLY(JMLY) = MAT_LY(I)    ! layer defined
-                   POSLY(I,IT) = ZERO                     
+                   POSLY(I,IT) = ZERO  
+                   FAC =  THK(I)**3    
+                   IZ(I) = IZ(I) +   FAC*THK_IT(IT,I)*(THK_IT(IT,I)*THK_IT(IT,I)*ONE_OVER_12)                  
                 ENDDO                                                                                     
              ENDDO         
           ENDIF   
@@ -275,6 +283,9 @@ c----
               THKLY(J)   = THK_NPTT 
               POSLY(I,N) = POS_0   
               MATLY(J)   = MAT_LAY  
+              FAC = THK(I)**3 
+              IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                             POSLY(I,N)*POSLY(I,N))
             ENDDO                                 
           ENDDO
 c----
@@ -339,6 +350,9 @@ c----
                      ENDIF ! IF (N == 1)
                    ENDIF ! IP
                  ENDIF ! IF (IDRAPE == 0)
+                 FAC = THK(I)**3 
+                 IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                             POSLY(I,N)*POSLY(I,N))
                ENDDO                                 
              ENDDO  
              
@@ -381,7 +395,10 @@ c
                                   POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio       
      .                                 + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                     
                               ENDIF ! IF (ILAY == 1)                                                                
-                              THKLY(J) = THK_IT(IPT,I)                                                              
+                              THKLY(J) = THK_IT(IPT,I)  
+                              FAC = THK(I)**3 
+                              IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                           POSLY(I,IPT)*POSLY(I,IPT))                                                            
                           ENDDO                                                                                
                           MATLY(JMLY) = MAT_LY(I)    ! layer defined                
                         ENDDO ! DO I=JFT,JLT        
@@ -404,7 +421,10 @@ c
                                   POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio       
      .                                 + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                     
                               ENDIF ! IF (ILAY == 1)                                                                
-                              THKLY(J) = THK_IT(IPT,I)                                            
+                              THKLY(J) = THK_IT(IPT,I)  
+                              FAC = THK(I)**3 
+                              IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                           POSLY(I,IPT)*POSLY(I,IPT))                                           
                          ENDDO                                                                               
                          MATLY(JMLY) = MAT_LY(I)    ! layer defined                      
                         ENDDO ! DO I=JFT,JLT    
@@ -437,7 +457,10 @@ cc                  IPID_LY = STACK%IGEO(IPPID + ILAY,ISUBSTACK)  ! layer PID (i
                                   POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio       
      .                                 + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                     
                               ENDIF ! IF (ILAY == 1)                                                                
-                              THKLY(J) = THK_IT(IPT,I)                                                              
+                              THKLY(J) = THK_IT(IPT,I)   
+                              FAC = THK(I)**3
+                              IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                           POSLY(I,IPT)*POSLY(I,IPT))                                                             
                             ENDDO     
                           ELSE 
                              IP = DRAPE(IE)%INDX_PLY(ILAY)
@@ -456,7 +479,10 @@ cc                  IPID_LY = STACK%IGEO(IPPID + ILAY,ISUBSTACK)  ! layer PID (i
                                      POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio    
      .                                    + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                   
                                  ENDIF ! IF (ILAY == 1) 
-                                  THKLY(J) = THK_IT(IPT,I)                                                          
+                                  THKLY(J) = THK_IT(IPT,I)   
+                                  FAC = THK(I)**3
+                                  IZ(I) = IZ(I)  +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                               POSLY(I,IPT)*POSLY(I,IPT))                                                            
                                ENDDO                           
                              ELSE 
                                DO IT=1,NPTT                                                                         
@@ -469,7 +495,10 @@ cc                  IPID_LY = STACK%IGEO(IPPID + ILAY,ISUBSTACK)  ! layer PID (i
                                      POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio    
      .                                    + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                   
                                  ENDIF ! IF (ILAY == 1)                                                              
-                                 THKLY(J) = THK_IT(IPT,I)                                                      
+                                 THKLY(J) = THK_IT(IPT,I)  
+                                  FAC = THK(I)**3 
+                                  IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                              POSLY(I,IPT)*POSLY(I,IPT))                                                     
                                ENDDO 
                              ENDIF  ! IP 
                          ENDIF ! IE                                                               
@@ -496,7 +525,10 @@ cc                  IPID_LY = STACK%IGEO(IPPID + ILAY,ISUBSTACK)  ! layer PID (i
                                   POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio       
      .                                 + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                     
                               ENDIF ! IF (ILAY == 1)                                                                
-                              THKLY(J) = THK_IT(IPT,I)                                                              
+                              THKLY(J) = THK_IT(IPT,I)    
+                              FAC = THK(I)**3 
+                              IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                           POSLY(I,IPT)*POSLY(I,IPT))                                                              
                             ENDDO     
                           ELSE 
                              IP = DRAPE(IE)%INDX_PLY(ILAY)
@@ -515,7 +547,10 @@ cc                  IPID_LY = STACK%IGEO(IPPID + ILAY,ISUBSTACK)  ! layer PID (i
                                      POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio    
      .                                    + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                   
                                  ENDIF ! IF (ILAY == 1)                                                              
-                                 THKLY(J) = THK_IT(IPT,I)                                                            
+                                 THKLY(J) = THK_IT(IPT,I) 
+                                 FAC = THK(I)**3 
+                                 IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                             POSLY(I,IPT)*POSLY(I,IPT))                                                           
                                ENDDO                           
                              ELSE 
                                DO IT=1,NPTT                                                                         
@@ -529,7 +564,10 @@ cc                  IPID_LY = STACK%IGEO(IPPID + ILAY,ISUBSTACK)  ! layer PID (i
                                      POSLY(I,IPT) = POSLY(I,IPT - 1)           ! integr. point "IT" position ratio    
      .                                    + HALF*(THK_IT(IPT,I) + THK_IT(IPT-1,I))                                   
                                  ENDIF ! IF (ILAY == 1)                                                              
-                                 THKLY(J) = THK_IT(IPT,I)                                                            
+                                 THKLY(J) = THK_IT(IPT,I)   
+                                 FAC = THK(I)**3 
+                                 IZ(I) = IZ(I) +   FAC*THKLY(J)*(THKLY(J)*THKLY(J)*ONE_OVER_12 +                                     
+     .                                                           POSLY(I,IPT)*POSLY(I,IPT))                                                          
                                ENDDO 
                              ENDIF  ! IP 
                          ENDIF ! IE                                                                                

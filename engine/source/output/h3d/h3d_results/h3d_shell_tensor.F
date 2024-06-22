@@ -103,13 +103,13 @@ C-----------------------------------------------
       my_real ,DIMENSION(3,MVSIZ) :: STRAIN
       my_real ,DIMENSION(4*MVSIZ) :: XN,YN,ZN,DXN,DYN,DZN
       my_real ,DIMENSION(:,:) , ALLOCATABLE :: SIGE,SIGM,EPSM
-
+      my_real ,DIMENSION(MVSIZ) :: IZ
       TYPE(BUF_LAY_) ,POINTER :: BUFLY
       TYPE(G_BUFEL_) ,POINTER :: GBUF
       TYPE(L_BUFEL_) ,POINTER :: LBUF
       my_real, DIMENSION(:) ,POINTER  :: UPARAM,DIR_A,DIR_B
       !
-      INTEGER, DIMENSION(:) , ALLOCATABLE :: MATLY   !!  MATLY(MVSIZ*LAY_MAX)
+      INTEGER, DIMENSION(:) , ALLOCATABLE :: MATLY      !!  MATLY(MVSIZ*LAY_MAX)
       my_real, DIMENSION(:) , ALLOCATABLE :: THKLY   !!  THKLY(MVSIZ*LAY_MAX*LAYNPT_MAX)
       my_real, DIMENSION(:,:), ALLOCATABLE :: POSLY,THK_LY
 C-----------------------------------------------
@@ -304,7 +304,7 @@ c
      .                   MAT          ,PID    ,THKLY            ,MATLY  ,POSLY   ,
      .                   IGTYP        ,IXFEM  ,IXLAY            ,NLAY   ,MPT0     ,
      .                   ISUBSTACK    ,STACK  ,DRAPE_SH3N       ,NFT    ,GBUF%THK,
-     .                   NEL         ,THK_LY ,DRAPEG%INDX_SH3N ,SEDRAPE,NUMEL_DRAPE   )
+     .                   NEL         ,THK_LY ,DRAPEG%INDX_SH3N ,SEDRAPE,NUMEL_DRAPE, IZ  )
               ELSE ! ITY = 3
                      NUMEL_DRAPE = NUMELC_DRAPE  
                      SEDRAPE = SCDRAPE
@@ -313,7 +313,7 @@ c
      .                  MAT          ,PID    ,THKLY           ,MATLY  ,POSLY   ,
      .                  IGTYP        ,IXFEM  ,IXLAY           ,NLAY   ,MPT0     ,
      .                  ISUBSTACK    ,STACK  ,DRAPE_SH4N      ,NFT    ,GBUF%THK ,
-     .                   NEL         ,THK_LY ,DRAPEG%INDX_SH4N,SEDRAPE ,NUMEL_DRAPE     )      
+     .                   NEL         ,THK_LY ,DRAPEG%INDX_SH4N,SEDRAPE ,NUMEL_DRAPE , IZ   )      
              ENDIF 
             ENDIF 
 C--------------------------------------------------

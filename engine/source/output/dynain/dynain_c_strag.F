@@ -87,8 +87,8 @@ C-----------------------------------------------
      .   IPMAT,IXFEM,IXLAY,ISUBSTACK,IPTT,IS_WRITTEN,
      ,   LAYNPT_MAX,NLAY_MAX,IERR,
      .   JDIR,ILAY,J1,J2,IREL,G_STRA,IPT_ALL,SEDRAPE,NUMEL_DRAPE
-      INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   !! 
-      my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY   !! 
+      INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   
+      my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY  
       my_real, DIMENSION(:,:) , ALLOCATABLE :: POSLY,THK_LY  
       INTEGER ,  DIMENSION(:),ALLOCATABLE :: PTWA, PTWA_P0
       INTEGER MAT(MVSIZ),PID(MVSIZ)
@@ -99,7 +99,8 @@ C-----------------------------------------------
       my_real, 
      .   DIMENSION(:),POINTER  :: STRAIN    
       my_real 
-     .   QT(9,MVSIZ),STRAING(6),ZH,THKP ,THK0(MVSIZ)   
+     .   QT(9,MVSIZ),STRAING(6),ZH,THKP ,THK0(MVSIZ)
+      my_real, DIMENSION(MVSIZ) :: IZ
       TYPE(G_BUFEL_)  ,POINTER :: GBUF     
       TYPE(L_BUFEL_)  ,POINTER :: LBUF     
       TYPE(BUF_LAY_)  ,POINTER :: BUFLY     
@@ -175,11 +176,12 @@ C
 
           NLAY_MAX   = MAX(NLAY,NPT,  ELBUF_TAB(NG)%NLAY)
           ALLOCATE(MATLY(MVSIZ*NLAY_MAX), THKLY(MVSIZ*NLAY_MAX*LAYNPT_MAX),
-     .         POSLY(MVSIZ,NLAY_MAX*LAYNPT_MAX),THK_LY(NEL,NLAY_MAX*LAYNPT_MAX))
+     .         POSLY(MVSIZ,NLAY_MAX*LAYNPT_MAX),THK_LY(NEL,NLAY_MAX*LAYNPT_MAX),
+     .         )
           MATLY  = 0
           THKLY  = ZERO
           POSLY  = ZERO
-          THK_LY = ZERO  
+          THK_LY = ZERO
           IF (MLW == 1 .OR. MLW == 3 .OR. MLW == 23) MPT=0
 
           DO I=LFT,LLT
@@ -203,7 +205,7 @@ C------------------------------------------------
      .           MAT        ,PID        ,THKLY      ,MATLY      ,POSLY     ,
      .           IGTYP      ,IXFEM      ,IXLAY      ,NLAY       ,NPT       ,
      .           ISUBSTACK  ,STACK      ,DRAPE_SH4N   ,NFT      ,THKE      , 
-     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH4N,SEDRAPE,NUMEL_DRAPE)
+     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH4N,SEDRAPE,NUMEL_DRAPE,IZ)
 
 C-------------------------------------------------------
 C     ELEMENT LOCAL FRAME : for rotation local -> Global
@@ -555,8 +557,8 @@ C------------------------------------------------
      .           ELBUF_TAB(NG),LFT      ,LLT        ,GEO        ,IGEO      ,
      .           MAT        ,PID        ,THKLY      ,MATLY      ,POSLY     ,
      .           IGTYP      ,IXFEM      ,IXLAY      ,NLAY       ,NPT       ,
-     .           ISUBSTACK  ,STACK      ,DRAPE_SH3N   ,NFT        ,THKE      , 
-     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH3N ,SEDRAPE,NUMEL_DRAPE)
+     .           ISUBSTACK  ,STACK      ,DRAPE_SH3N   ,NFT        ,THKE    , 
+     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH3N ,SEDRAPE,NUMEL_DRAPE, IZ)
 
 C-------------------------------------------------------
 C     ELEMENT LOCAL FRAME : for rotation local -> Global

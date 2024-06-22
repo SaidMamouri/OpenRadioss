@@ -97,9 +97,10 @@ C-----------------------------------------------
       my_real, 
      .   DIMENSION(:),POINTER  :: STRAIN    
       my_real 
-     .   QT(9,MVSIZ),STRAING(6),ZH,THKP ,THK0(MVSIZ)   
+     .   QT(9,MVSIZ),STRAING(6),ZH,THKP ,THK0(MVSIZ)  
+      my_real, DIMENSIOn(MVSIZ) :: IZ 
       INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   
-      my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY    
+      my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY
       my_real, DIMENSION(:,:) , ALLOCATABLE :: POSLY,THK_LY  
 
 C-----------------------------------------------
@@ -169,14 +170,14 @@ C-----------------------------------------------
          MATLY  = 0
          THKLY  = ZERO
          POSLY  = ZERO
-         THK_LY = ZERO   
+         THK_LY = ZERO
          NUMEL_DRAPE = NUMELC_DRAPE  
          SEDRAPE = SCDRAPE
          CALL LAYINI(ELBUF_TAB(NG),LFT      ,LLT      ,GEO      ,IGEO    ,
      .              MAT_1    ,PID_1    ,THKLY    ,MATLY    ,POSLY    , 
      .              IGTYP    ,IBID0    ,IBID0    ,NLAY     ,NPT      ,   
      .              ISUBSTACK,STACK    ,DRAPE_SH4N ,NFT      ,THKE     ,
-     .              NEL      ,THK_LY   ,DRAPEG%INDX_SH4N ,SEDRAPE,NUMEL_DRAPE)
+     .              NEL      ,THK_LY   ,DRAPEG%INDX_SH4N ,SEDRAPE,NUMEL_DRAPE,IZ)
          CALL GET_Q4L(LFT ,LLT ,IXC(1,NF1),X ,GBUF%OFF,IREL ,QT )
           NPT_ALL = 0
           DO ILAY=1,NLAY
@@ -480,14 +481,14 @@ C-----------------------------------------------
          MATLY  = 0
          THKLY  = ZERO
          POSLY  = ZERO
-         THK_LY = ZERO      
+         THK_LY = ZERO
          NUMEL_DRAPE = NUMELTG_DRAPE  
          SEDRAPE = STDRAPE
          CALL LAYINI(ELBUF_TAB(NG),LFT      ,LLT      ,GEO      ,IGEO    ,
      .              MAT_1    ,PID_1    ,THKLY    ,MATLY    ,POSLY    , 
      .              IGTYP    ,IBID0    ,IBID0    ,NLAY     ,NPT      ,   
      .              ISUBSTACK,STACK    ,DRAPE_SH3N ,NFT      ,THKE    ,
-     .              NEL      ,THK_LY   ,DRAPEG%INDX_SH3N,SEDRAPE,NUMEL_DRAPE)
+     .              NEL      ,THK_LY   ,DRAPEG%INDX_SH3N,SEDRAPE,NUMEL_DRAPE,IZ)
          CALL GET_T3L(LFT    ,LLT    ,IXTG(1,NF1),X    ,GBUF%OFF,
      .                IREL   ,QT     )
           NPT_ALL = 0

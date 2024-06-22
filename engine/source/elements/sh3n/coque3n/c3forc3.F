@@ -211,6 +211,7 @@ C-----------------------------------------------
      .   F_DEF(MVSIZ,8), U21X(MVSIZ),U31X(MVSIZ),U21Y(MVSIZ),U31Y(MVSIZ),
      .   RZ13(MVSIZ),RZ23(MVSIZ),BMRZT(MVSIZ,8),WKXY(MVSIZ),
      .   ECOS(MVSIZ),ESIN(MVSIZ),NFOR(NEL,5),NMOM(NEL,3),TG3(MVSIZ)
+       my_real, DIMENSION(MVSIZ)   :: IZ  
 !       SP issue :
         REAL(kind=8), DIMENSION(MVSIZ) ::X1G,X2G,X3G
         REAL(kind=8), DIMENSION(MVSIZ) ::Y1G,Y2G,Y3G
@@ -520,7 +521,8 @@ C--------------------------
      N   ISMSTR    ,IR        ,IS        ,NLAY      ,NPT       ,
      O   IXLAY     ,IXEL      ,ISUBSTACK ,STACK     ,
      P   F_DEF     ,ITASK     ,DRAPE_SH3N  ,VAR_REG   ,NLOC_DMG ,
-     R   INDX_DRAPE,THKE        ,SEDRAPE     ,NUMEL_DRAPE )
+     R   INDX_DRAPE,THKE        ,SEDRAPE     ,NUMEL_DRAPE      ,
+     Q   IZ )
 C--------------------------
       IF ((IMON_MAT==1).AND.ITASK == 0)CALL STOPTIME(35,1)
 C--------------------------
@@ -533,7 +535,7 @@ C--------------------------
      4        ALPE   ,MSTG      ,DMELTG  ,JSMS   ,PTG     ,
      5        SHF    ,IGTYP     ,IGMAT   ,G      ,A11     ,
      6        A11R   ,GBUF%G_DT ,GBUF%DT ,ALDT   ,THK0    ,
-     7        AREA   ,NGL       ,IMAT    ,MTN    )
+     7        AREA   ,NGL       ,IMAT    ,MTN    ,IZ)
 c
 C--------keep  GBUF%FOR,GBUF%MOM in new local sys as LBUF%SIG    
       CALL C3SROTO3(JFT    ,JLT    ,ECOS    ,ESIN      ,GBUF%FOR,

@@ -533,6 +533,7 @@ C-----------------------------------------------
      .        ISUBSTACK,IGMAT,IPOS,IPT_ALL,ILAY,IPT,IT,NPTT,
      .        LAYNPT_MAX, NLAY_MAX
             INTEGER MAT_IPLY(MVSIZ,NPT)
+      my_real, DIMENSION(NEL) :: IZ 
       INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   !! 
       my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY   !! 
       my_real, DIMENSION(:,:) , ALLOCATABLE :: POSLY,THK_LY
@@ -540,7 +541,7 @@ C-----------------------------------------------
      .   WMC,FACG,COEF,WM
       my_real
      .   HMOR(MVSIZ,2),HMLY(MVSIZ,4),HCLY(MVSIZ,2), 
-     .   HMORLY(MVSIZ,2),SHF(MVSIZ),IZZ(MVSIZ),IZ(MVSIZ)
+     .   HMORLY(MVSIZ,2),SHF(MVSIZ),IZZ(MVSIZ)
 C--------IORTH=2 -> HMFOR couplage non-null----------------
       IF (MTN == 19.OR.MTN == 15.OR.MTN == 25.OR.MTN == 119) THEN
         IORTH=1
@@ -611,7 +612,7 @@ C----------unify the factor ONE_OVER_12 after
      .                    MAT      ,PID      ,THKLY    ,MATLY    ,POSLY   , 
      .                    IGTYP    ,0        ,0        ,NLAY     ,NPT     , 
      .                    ISUBSTACK,STACK    ,DRAPE    ,NFT      ,THKE    ,
-     .                    JLT      ,THK_LY   ,INDX_DRAPE, SEDRAPE,NUMEL_DRAPE)                              
+     .                    JLT      ,THK_LY   ,INDX_DRAPE, SEDRAPE,NUMEL_DRAPE,IZ)                              
               HM(JFT:JLT,1:6)=ZERO
               HF(JFT:JLT,1:6)=ZERO
               HC(JFT:JLT,1:2)=ZERO
@@ -643,11 +644,6 @@ C----------unify the factor ONE_OVER_12 after
               ELSE
                 IORTH=2
                 IF ((IGTYP == 11 .OR. IGTYP == 17).AND. IGMAT > 0) THEN
-C                 
-                  DO I=JFT,JLT
-                    IZZ(I) = ZERO
-                    IZ(I) = ZERO
-                  ENDDO
 C             
                   DO J=1,NPT
                     J2=1+(J-1)*JLT
@@ -666,8 +662,6 @@ C
                       HC(I,2)=HC(I,2)+THKLY(JJ)*HCLY(I,2)
                       HM(I,5)=HM(I,5)+THKLY(JJ)*HMORLY(I,1)
                       HM(I,6)=HM(I,6)+THKLY(JJ)*HMORLY(I,2)
-                      IZZ(I) = IZZ(I) + WMC 
-                      IZ(I) = IZ(I) + WM 
 C                
                       HF(I,1)=HF(I,1)+WMC*HMLY(I,1)
                       HF(I,2)=HF(I,2)+WMC*HMLY(I,2)
@@ -724,10 +718,6 @@ C
               ELSEIF(IGTYP == 52 .OR. (IGTYP == 51 .AND. IGMAT > 0)) THEN
               
                 IPT_ALL = 0
-                DO I=JFT,JLT
-                    IZZ(I) = ZERO
-                    IZ(I) = ZERO
-                ENDDO
                 DO ILAY=1,NLAY
                   NPTT = ELBUF_STR%BUFLY(ILAY)%NPTT
                   DO IT=1,NPTT
@@ -765,8 +755,6 @@ C-----------
                       HMFOR(I,4)=HMFOR(I,4)+WM*HMLY(I,4)
                       HMFOR(I,5)=HMFOR(I,5)+WM*HMORLY(I,1)
                       HMFOR(I,6)=HMFOR(I,6)+WM*HMORLY(I,2)
-                      IZZ(I) = IZZ(I) + WMC 
-                      IZ(I) = IZ(I) + WM 
                     ENDDO
                   ENDDO  !  DO J=1,NPTT
                   IPT_ALL = IPT_ALL + NPTT

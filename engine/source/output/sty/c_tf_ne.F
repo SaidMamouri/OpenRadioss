@@ -82,6 +82,7 @@ C-----------------------------------------------
      .   SIG0(6,MVSIZ),EPS(MVSIZ),MOM0(3,MVSIZ),
      .   SK(2,MVSIZ),ST(2,MVSIZ),MK(2,MVSIZ),MT(2,MVSIZ),
      .   SHK(2,MVSIZ),SHT(2,MVSIZ),Z01(11,11),ZZ
+      my_real , DIMENSION(MVSIZ) ::  IZ
       !
       INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   
       my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY    
@@ -159,11 +160,11 @@ C
          NUMEL_DRAPE = NUMELTG_DRAPE
          SEDRAPE = STDRAPE
         CALL LAYINI(
-     .      ELBUF_STR,1    ,NEL             ,GEO              ,IGEO    ,
-     .      MAT      ,PID  ,THKLY           ,MATLY            ,POSLY   ,
-     .      IGTYP    ,IXFEM,IXLAY           ,NLAY             ,NPT     ,
-     .      ISUBSTACK,STACK,DRAPE_SH3N        ,NFT            ,THKE    ,
-     .      NEL      ,THK_LY  ,DRAPEG%INDX_SH3N ,SEDRAPE,NUMEL_DRAPE   )
+     .      ELBUF_STR,1       ,NEL             ,GEO              ,IGEO    ,
+     .      MAT      ,PID     ,THKLY           ,MATLY            ,POSLY   ,
+     .      IGTYP    ,IXFEM   ,IXLAY           ,NLAY             ,NPT     ,
+     .      ISUBSTACK,STACK   ,DRAPE_SH3N        ,NFT            ,THKE    ,
+     .      NEL      ,THK_LY  ,DRAPEG%INDX_SH3N ,SEDRAPE,NUMEL_DRAPE   ,IZ)
       ELSE
         NUMEL_DRAPE = NUMELC_DRAPE  
         SEDRAPE = SCDRAPE
@@ -172,7 +173,7 @@ C
      .      MAT      ,PID  ,THKLY           ,MATLY            ,POSLY   ,
      .      IGTYP    ,IXFEM,IXLAY           ,NLAY             ,NPT     ,
      .      ISUBSTACK,STACK,DRAPE_SH4N        ,NFT            ,THKE    ,
-     .      NEL      ,THK_LY  ,DRAPEG%INDX_SH4N,SEDRAPE,NUMEL_DRAPE     )      
+     .      NEL      ,THK_LY  ,DRAPEG%INDX_SH4N,SEDRAPE,NUMEL_DRAPE , IZ )      
       ENDIF  
 C------------------------
 C        STRESS

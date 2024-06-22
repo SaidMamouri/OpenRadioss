@@ -188,6 +188,7 @@ c     indx utilise localement contrairement aux coques 4n
      .   ECOS(MVSIZ),ESIN(MVSIZ),A11R(MVSIZ),THKE0(MVSIZ),ALDT(MVSIZ)
       my_real 
      .   BID,THKR,F_DEF(MVSIZ,8),WKXY(MVSIZ)
+      my_real, DIMENSION(NEL)   :: IZ  
 !       SP issue :
         REAL(kind=8), DIMENSION(MVSIZ) ::X1G,X2G,X3G
         REAL(kind=8), DIMENSION(MVSIZ) ::Y1G,Y2G,Y3G
@@ -443,7 +444,7 @@ C--------------------------
      P   ISMSTR    ,IR        ,IS        ,NLAYER    ,NPTT      ,
      Q   IXLAY     ,IXEL      ,ISUBSTACK ,STACK     ,
      P   BID    ,ITASK        ,DRAPE_SH3N  ,VARNL     ,NLOC_DMG ,
-     R   INDX_DRAPE , THKE    ,SEDRAPE ,NUMEL_DRAPE)
+     R   INDX_DRAPE , THKE    ,SEDRAPE ,NUMEL_DRAPE , IZ )
 
 C--------------------------
         IF ((ITASK==0).AND.(IMON_MAT==1)) CALL STOPTIME(35,1)

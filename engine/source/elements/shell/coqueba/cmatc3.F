@@ -124,7 +124,8 @@ C     REAL
      .   FAC(MVSIZ),HMLY(MVSIZ,4),HCLY(MVSIZ,2), HMORLY(MVSIZ,2),SFAC(MVSIZ)
       INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   !! 
       my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY   !! 
-      my_real, DIMENSION(:,:) , ALLOCATABLE :: POSLY,THK_LY  
+      my_real, DIMENSION(:,:) , ALLOCATABLE :: POSLY,THK_LY 
+      my_real, DIMENSION(NEL)  :: IZ
 C-----------------------------------------------
       COEF =EM01
       NEL = JLT-JFT+1
@@ -249,7 +250,7 @@ C         INTEGRATION PAR COUCHES
      .                MAT      ,PID      ,THKLY    ,MATLY    ,POSLY   ,  
      .                IGTYP    ,0        ,0        ,NLAY     ,NPT     ,  
      .                ISUBSTACK,STACK    ,DRAPE   ,NFT       ,THKE     ,
-     .                NEL      ,THK_LY   ,INDX_DRAPE,SEDRAPE, NUMEL_DRAPE)                               
+     .                NEL      ,THK_LY   ,INDX_DRAPE,SEDRAPE, NUMEL_DRAPE, IZ)                               
          DO I=JFT,JLT
            HM(I,1)=ZERO
            HM(I,2)=ZERO
@@ -336,7 +337,7 @@ C-----by layer
      .                MAT      ,PID      ,THKLY    ,MATLY    ,POSLY   ,  
      .                IGTYP    ,0        ,0        ,NLAY     ,NPT     ,  
      .                ISUBSTACK,STACK    ,DRAPE   ,NFT       ,THKE     , 
-     .                JLT      ,THK_LY   ,INDX_DRAPE,SEDRAPE ,NUMEL_DRAPE)                               
+     .                JLT      ,THK_LY   ,INDX_DRAPE,SEDRAPE ,NUMEL_DRAPE,IZ ) 
          DO I=JFT,JLT
           HM(I,1)=A11(I)
           HM(I,2)=A11(I)

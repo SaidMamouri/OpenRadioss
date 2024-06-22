@@ -90,7 +90,7 @@ C-----------------------------------------------
      .   JDIR,ILAY,J1,J2,SEDRAPE,NUMEL_DRAPE,KB
      
       INTEGER, DIMENSION(:)   , ALLOCATABLE :: MATLY   !! 
-      my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY   !! 
+      my_real, DIMENSION(:)   , ALLOCATABLE :: THKLY 
       my_real, DIMENSION(:,:) , ALLOCATABLE :: POSLY,THK_LY   
       INTEGER ,  DIMENSION(:),ALLOCATABLE :: PTWA, PTWA_P0
       INTEGER MAT(MVSIZ),PID(MVSIZ)
@@ -107,7 +107,7 @@ C-----------------------------------------------
      .   E3X(MVSIZ), E3Y(MVSIZ), E3Z(MVSIZ), 
      .   RX(MVSIZ), RY(MVSIZ), RZ(MVSIZ), 
      .   SX(MVSIZ), SY(MVSIZ), SZ(MVSIZ),
-     .   THK0(MVSIZ)
+     .   THK0(MVSIZ),IZ(MVSIZ)
       my_real, ALLOCATABLE, DIMENSION(:) :: DIRA,DIRB
       my_real, DIMENSION(:) ,POINTER     :: DIR_A, DIR_B
       TARGET :: DIRA,DIRB
@@ -188,7 +188,7 @@ C
           MATLY  = 0
           THKLY  = ZERO
           POSLY  = ZERO
-          THK_LY = ZERO   
+          THK_LY = ZERO
           DO I=LFT,LLT
              MAT(I)=IXC(1,NFT+I)
              PID(I)=IXC(6,NFT+I)
@@ -209,7 +209,7 @@ C------------------------------------------------
      .           MAT        ,PID        ,THKLY      ,MATLY      ,POSLY     ,
      .           IGTYP      ,IXFEM      ,IXLAY      ,NLAY       ,NPT       ,
      .           ISUBSTACK  ,STACK      ,DRAPE_SH4N   ,NFT        ,THKE      , 
-     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH4N ,SEDRAPE,NUMEL_DRAPE)
+     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH4N ,SEDRAPE,NUMEL_DRAPE,IZ)
 
 C-------------------------------------------------------
 C     ELEMENT LOCAL FRAME : for rotation local -> Global
@@ -1248,7 +1248,7 @@ C------------------------------------------------
      .           MAT        ,PID        ,THKLY      ,MATLY      ,POSLY     ,
      .           IGTYP      ,IXFEM      ,IXLAY      ,NLAY       ,NPT       ,
      .           ISUBSTACK  ,STACK      ,DRAPE_SH3N   ,NFT        ,THKE      , 
-     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH3N,SEDRAPE,NUMEL_DRAPE)
+     .           NEL        ,THK_LY     ,DRAPEG%INDX_SH3N,SEDRAPE,NUMEL_DRAPE,IZ)
 
 C-------------------------------------------------------
 C     ELEMENT LOCAL FRAME : for rotation local -> Global

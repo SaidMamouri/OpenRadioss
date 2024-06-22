@@ -95,7 +95,7 @@ Chd|====================================================================
      .          MSZ2C   ,ZPLY    ,ISUBSTACK,NLAY    ,ELBUF_STR,
      .          STACK   ,THKI    ,RNOISE   ,DRAPE   ,
      .          PERTURB ,IX1     ,IX2      ,IX3     ,IX4      ,
-     .          IDRAPE  ,INDX)
+     .          IDRAPE  ,INDX    ,IZ)
 C-----------------------------------------------
 C   M o d u l e s
 C-----------------------------------------------
@@ -134,9 +134,11 @@ C-----------------------------------------------
      .        IGEO(NPROPGI,*),NSHNOD(*), SH4TREE(KSH4TREE,*),
      .        ISUBSTACK,NLAY,PERTURB(NPERTURB),IDRAPE
       INTEGER, DIMENSION(MVSIZ), INTENT(IN)  :: IX1,IX2,IX3,IX4
+
       INTEGER*8 I8MI(6,*) 
       INTEGER, DIMENSION(SCDRAPE) :: INDX
       my_real, DIMENSION(MVSIZ), INTENT(IN) :: AREA
+        my_real, DIMENSION(MVSIZ), INTENT(OUT) :: IZ
       my_real
      .   X(3,*), GEO(NPROPG,*), PM(NPROPM,*), MS(*), TINER(*),THKE(*),
      .   V(3,*),PARTSAV(20,*),MSC(*),INC(*),
@@ -917,6 +919,7 @@ C----------------------------------------------
         IPPOS = 400
         DO I=LFT,LLT
           XI(I)=ZERO
+          IZ(I)=ZERO
           DO N=1,NPT
             I1=IPTHK+N
             I3=IPPOS+N
@@ -928,6 +931,7 @@ C----------------------------------------------
             MSL   = PM(89,MATLY)*THKLY*AREA(I)*FOURTH
             XIL   = MSL*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
             XI(I) = XI(I) + XIL
+            IZ(I) = IZ(I) +  THKLY*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
           ENDDO
         ENDDO
       ELSEIF(IGTYP == 17) THEN
@@ -945,6 +949,7 @@ C
         IF(IDRAPE == 0) THEN
            DO I=LFT,LLT
              XI(I)=ZERO
+             IZ(I)= ZERO
              DO N=1,NPT
                I1 = IPPID + N
                I2 = IPMAT + N
@@ -957,11 +962,13 @@ C
                MSL   = PM(89,MATLY)*THKLY*AREA(I)*FOURTH
                XIL   = MSL*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
                XI(I) = XI(I) + XIL
+               IZ(I) = IZ(I) +  THKLY*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
              ENDDO  
            ENDDO   
          ELSE ! IDRAPE > 0
            DO I=LFT,LLT
              XI(I)=ZERO
+             IZ(I)= ZERO
              IE = INDX(NFT + I) 
              IF(IE == 0) THEN
                DO N=1,NPT
@@ -976,6 +983,7 @@ C
                  MSL   = PM(89,MATLY)*THKLY*AREA(I)*FOURTH
                  XIL   = MSL*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
                  XI(I) = XI(I) + XIL
+                 IZ(I) = IZ(I) +  THKLY*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
                ENDDO  
              ELSE
                DO N=1,NPT                           
@@ -1002,6 +1010,7 @@ C
                    MSL   = PM(89,MATLY)*THKLY*AREA(I)*FOURTH
                    XIL   = MSL*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
                    XI(I) = XI(I) + XIL
+                   IZ(I) = IZ(I) +  THKLY*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
                  ELSE !IP ==0
                    I1 = IPPID + N
                    I2 = IPMAT + N
@@ -1020,7 +1029,8 @@ C
                    LAYPOS = POSLY(N)*THK(I)                              
                    MSL   = PM(89,MATLY)*THKLY*AREA(I)*FOURTH
                    XIL   = MSL*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)
-                   XI(I) = XI(I) + XIL         
+                   XI(I) = XI(I) + XIL   
+                   IZ(I) = IZ(I) +  THKLY*(AREA(I)/FAC+THKLY*THKLY*ONE_OVER_12+LAYPOS*LAYPOS)      
                  ENDIF  
                ENDDO  
              ENDIF  
@@ -1041,6 +1051,7 @@ C
         IF(IDRAPE == 0) THEN  
            DO I=LFT,LLT
              XI(I)=ZERO
+             IZ(I)=ZERO
              IPT_ALL = 0
              DO ILAY=1, NLAY   !  NPT                                                                              
                NPTT = ELBUF_STR%BUFLY(ILAY)%NPTT                                                                   
@@ -1089,7 +1100,9 @@ C
                  MS_NPTT = PM(89,MATLY)*THK_IT(IT)*AREA(I)*FOURTH                                                  
                  XIL = MS_NPTT*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+                                     
      .                          POS_IT(IT)*POS_IT(IT))                                                             
-                 XI(I) = XI(I) + XIL                                                                               
+                 XI(I) = XI(I) + XIL   
+                 IZ(I) = IZ(I) + THK_IT(IT)*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+                                     
+     .                           POS_IT(IT)*POS_IT(IT))                                                                           
                ENDDO                                                                                               
                IPT_ALL = IPT_ALL + NPTT                                                                            
               ENDDO  ! NLAY                                                                                      
@@ -1149,6 +1162,8 @@ C
                    XIL = MS_NPTT*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+
      .                            POS_IT(IT)*POS_IT(IT))
                    XI(I) = XI(I) + XIL 
+                   IZ(I) = IZ(I) + THK_IT(IT)*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+                                     
+     .                             POS_IT(IT)*POS_IT(IT))  
                  ENDDO
                  IPT_ALL = IPT_ALL + NPTT
                 ENDDO  ! NLAY
@@ -1206,6 +1221,8 @@ C
                       XIL = MS_NPTT*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+
      .                                POS_IT(IT)*POS_IT(IT))
                       XI(I) = XI(I) + XIL
+                      IZ(I) = IZ(I) + THK_IT(IT)*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+                                     
+     .                                 POS_IT(IT)*POS_IT(IT))  
                     ENDDO
                   ELSE ! IP == 0
                     NPTT = ELBUF_STR%BUFLY(ILAY)%NPTT
@@ -1254,6 +1271,8 @@ C
                       XIL = MS_NPTT*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+
      .                                POS_IT(IT)*POS_IT(IT))
                       XI(I) = XI(I) + XIL
+                      IZ(I) = IZ(I) + THK_IT(IT)*(AREA(I)/FAC+THK_IT(IT)*THK_IT(IT)*ONE_OVER_12+                                     
+     .                                           POS_IT(IT)*POS_IT(IT))  
                     ENDDO                    
                     ENDIF ! IP
                     IPT_ALL = IPT_ALL + NPTT   
@@ -1266,6 +1285,7 @@ C
         F_OFFSET= ZSHIFT*ZSHIFT
         DO I=LFT,LLT
           XI(I)=EMS(I)*(AREA(I)/FAC+THK(I)*THK(I)*(ONE_OVER_12+F_OFFSET))
+          IZ(I) = THK(I)*(AREA(I)/FAC+THK(I)*THK(I)*(ONE_OVER_12+F_OFFSET))
         ENDDO
       ENDIF
 C---  check stability condition

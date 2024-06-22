@@ -38,7 +38,7 @@ Chd|====================================================================
      4                 IOFC  ,NNE     ,AREA ,G    ,SHF   ,
      5                 MSC   ,DMELC   ,JSMS ,PTG  ,IGTYP ,
      6                 IGMAT ,A11R    ,G_DT ,DTEL ,MTN   ,
-     7                 PM    ,IMAT    )
+     7                 PM    ,IMAT    , IZ )
 C-----------------------------------------------
 C   I m p l i c i t   T y p e s
 C-----------------------------------------------
@@ -71,12 +71,13 @@ C     REAL
      .   VOL0(*), VISCMX(*), RHO(*),DT2T, AREA(*), G(*), SHF(*),
      .   MSC(*), DMELC(*), PTG(3,*),A11R(*),DTEL(MVSIZ)
       my_real, DIMENSION(NPROPM,NUMMAT) ,INTENT(IN):: PM
+      my_real,   DIMENSION(MVSIZ),  INTENT(IN)     ::   IZ
 C-----------------------------------------------
 C   L o c a l   V a r i a b l e s
 C-----------------------------------------------
       INTEGER INDXOF(MVSIZ),
      .        I, J, II, NINDX,IDT,ITYEL
-      my_real DT(MVSIZ),FAC,MAS,DIVM,MMIN  ,IZ   
+      my_real DT(MVSIZ),FAC,MAS,DIVM,MMIN   
 C=======================================================================
       DO I=JFT,JLT
         VISCMX(I) = MAX(VISCMX(I), AMU(I))
@@ -106,11 +107,14 @@ C----- isub will add here-----
        IF(IGTYP == 52 .OR. 
      .   ((IGTYP == 11 .OR. IGTYP == 17 .OR. IGTYP == 51)
      .                                   .AND. IGMAT > 0 )) THEN
-            FAC = HALF*VOL0(I)/ ALDT(I)**2
-            STIR(I) =(FAC * A11R(I)*THK02(I) + 
-     .                 FAC * A1(I) *AREA(I)) *ONE_OVER_12
+            !! OLD ! FAC = HALF*VOL0(I)/ ALDT(I)**2
+ !!           STIR(I) =(FAC * A11R(I)*THK02(I) + 
+ !!    .                 FAC * A1(I) *AREA(I)) * ONE_OVER_12
+             FAC =  HALF*AREA(I)/ ALDT(I)**2
+             STIR(I) =FAC * ( A11R(I)*IZ(I) + 
+     .                        A1(I)  *THK0(I)*AREA(I)*ONE_OVER_12 ) 
           ELSE
-            STIR(I) = STI(I) * (THK02(I)+AREA(I)) *ONE_OVER_12
+             STIR(I) = STI(I) * (THK02(I)+AREA(I)) *ONE_OVER_12
           ENDIF
          ENDIF 
         ENDDO
@@ -164,9 +168,9 @@ c dt = 2/w = sqrt( 2*(m+dmelc)/k)
                    STIR(I) = ZERO          
                 ELSE
                    STI(I) = HALF*VOL0(I) * A1(I) / ALDT(I)**2
-                   FAC =  HALF*VOL0(I)/ ALDT(I)**2
-                   STIR(I) = FAC*A11R(I)*THK02(I)*ONE_OVER_12 +
-     .                       FAC *A1(I)*AREA(I)*ONE_OVER_12
+                   FAC    = HALF*AREA(I)/ ALDT(I)**2
+                   STIR(I) =FAC * ( A11R(I)*IZ(I) + 
+     .                              A1(I)  *THK0(I)*AREA(I)*ONE_OVER_12 ) 
                   ENDIF
              ENDDO
           ELSE

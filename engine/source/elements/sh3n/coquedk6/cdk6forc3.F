@@ -175,6 +175,7 @@ c  indx utilise localement contrairement aux coques 4n
      .   TEMPEL(MVSIZ),BID,KRZ(MVSIZ),CONDE(MVSIZ),A11R(MVSIZ)
       my_real, 
      .    ALLOCATABLE, DIMENSION(:), TARGET :: DIRA,DIRB
+      my_real, DIMENSION(NEL)   :: IZ  
       my_real,
      .  DIMENSION(:) ,POINTER  :: DIR_A,DIR_B
 C--- Variables pour le non-local
@@ -370,7 +371,8 @@ C----------------------------------------------------------------------------
      N   ISMSTR    ,IR        ,IS        ,NLAY      ,NPT        ,
      O   IBID      ,IBID      ,ISUBSTACK ,STACK     ,
      P   BID       ,ITASK     ,DRAPE_SH3N  ,VAR_REG   ,NLOC_DMG  ,
-     R   INDX_DRAPE ,THKE        ,SEDRAPE     ,NUMEL_DRAPE)
+     R   INDX_DRAPE ,THKE        ,SEDRAPE     ,NUMEL_DRAPE       ,
+     Q   IZ  )
 C----------------------------------------------------------------------------
 C     FORCES VISCOCITE 
 C----------------------------
@@ -406,7 +408,7 @@ C--------------------------
      5        IOFC   ,NNOD   ,AREA     ,G      ,SHF   ,
      6        MSTG   ,DMELTG ,JSMS     ,PTG    ,IGTYP ,
      7        IGMAT  ,A11R   ,GBUF%G_DT, GBUF%DT,MTN   ,
-     8        PM     ,MAT(JFT))
+     8        PM     ,MAT(JFT), IZ )
 C--------------------------
 C     THERMAL TIME STEP
 C--------------------------

@@ -223,7 +223,7 @@ C-----------------------------------------------
       my_real 
      .  AREAT(MVSIZ),PX1T(MVSIZ),PX2T(MVSIZ),PY1T(MVSIZ),PY2T(MVSIZ),
      .  F_DEF(MVSIZ,8), U13X(MVSIZ),U24X(MVSIZ),U13Y(MVSIZ),U24Y(MVSIZ),
-     .  WXY(MVSIZ)
+     .  WXY(MVSIZ),IZ(MVSIZ)
 C
       INTEGER, DIMENSION(NEL) :: OFFLY
       INTEGER, ALLOCATABLE, DIMENSION(:) :: ELCRKINI
@@ -516,7 +516,7 @@ C-----------------------------
      N  ISMSTR      ,IR          ,IS          ,NLAY       ,NPT        ,
      O  IXLAY       ,IXEL        ,ISUBSTACK   ,STACK      ,
      P  F_DEF       ,ITASK       ,DRAPE_SH4N  ,VAR_REG    ,NLOC_DMG   ,
-     R  INDX_DRAPE  ,THKE        ,SEDRAPE     ,NUMEL_DRAPE)
+     R  INDX_DRAPE  ,THKE        ,SEDRAPE     ,NUMEL_DRAPE, IZ)
 C-----------------------------
       IF ((IMON_MAT==1).AND. ITASK == 0)CALL STOPTIME(35,1)
 C-----------------------------
@@ -604,7 +604,7 @@ C--------------------------
      4            VISCMX  ,PX1    ,PX2       ,PY1      ,PY2     ,
      5            VOL0    ,VOL00  ,RHO       ,ALDT     ,ALPE    ,
      6            INDXOF  ,NGL    ,ISMSTR    ,IOFC     ,MSC     ,
-     7            DMELC   ,JSMS   ,GBUF%G_DT ,GBUF%DT)
+     7            DMELC   ,JSMS   ,GBUF%G_DT ,GBUF%DT  )
       ENDIF
 C----------------------------
 C     FORCES INTERNES + ASSEMBLE

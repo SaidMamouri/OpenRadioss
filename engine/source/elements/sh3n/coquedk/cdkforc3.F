@@ -166,6 +166,8 @@ c  indx utilise localement contrairement aux coques 4n
      .   DIR2_CRK(NPT,MVSIZ),CONDE(MVSIZ),A11R(MVSIZ)
       my_real, 
      .   DIMENSION(1),TARGET :: BID
+
+      my_real, DIMENSION(NEL)   :: IZ  
       my_real
      .   X1G(MVSIZ), X2G(MVSIZ), X3G(MVSIZ),
      .   Y1G(MVSIZ), Y2G(MVSIZ), Y3G(MVSIZ),
@@ -408,7 +410,7 @@ C----------------------------------------------------------------------------
      N     ISMSTR    ,IR        ,IS        ,NLAY      ,NPT       ,
      O     IBID      ,IBID      ,ISUBSTACK ,STACK     ,
      P     BID       ,ITASK     ,DRAPE_SH3N  ,VAR_REG   ,NLOC_DMG  ,
-     R    INDX_DRAPE ,THKE        ,SEDRAPE     ,NUMEL_DRAPE)
+     R    INDX_DRAPE ,THKE        ,SEDRAPE     ,NUMEL_DRAPE ,  IZ  )
 C----------------------------------------------------------------------------
 C     THICKNESS CORRECTION 
 C----------------------------
@@ -497,7 +499,7 @@ C--------------------------
      5        IOFC   ,NNOD   ,AREA     ,G       ,SHF   ,
      6        MSTG   ,DMELTG ,JSMS     ,PTG     ,IGTYP ,
      7        IGMAT  ,A11R   ,GBUF%G_DT, GBUF%DT,MTN   ,
-     8        PM     ,MAT(JFT))
+     8        PM     ,MAT(JFT), IZ )
 C--------------------------
 C     THERMAL TIME STEP
 C--------------------------

@@ -250,6 +250,7 @@ C-----------------------------------------------
      .   VPINCHT1(MVSIZ,NNOD),VPINCHT2(MVSIZ,NNOD),DBETADXY(MVSIZ,3),
      .   BPINCHDAMP(MVSIZ,8),VFPINCHDAMPX(MVSIZ,4),VFPINCHDAMPY(MVSIZ,4),
      .   EZZAVG(MVSIZ),AREAPINCH(MVSIZ),ZLA(MVSIZ)
+       my_real, DIMENSION(MVSIZ)   :: IZ  
       INTEGER 
      .   NPLATT,PTW ,LENW,PTT,IPOUT
       INTEGER  IPLATT(MVSIZ)
@@ -768,7 +769,7 @@ C-----------------
      N    ISMSTR    ,IR        ,IS        ,NLAY      ,NPT       ,
      O    IBID      ,IBID      ,ISUBSTACK ,STACK     ,
      P    F_DEF(1,1,NG),ITASK  ,DRAPE_SH4N     ,VAR_REG(1,1),NLOC_DMG ,
-     R    INDX_DRAPE ,THKE        ,SEDRAPE     ,NUMEL_DRAPE)        
+     R    INDX_DRAPE ,THKE        ,SEDRAPE     ,NUMEL_DRAPE , IZ )        
         ENDIF
 C-----------------
         IF ((ITASK==0).AND.(IMON_MAT == 1)) CALL STOPTIME(35,1)
@@ -991,7 +992,7 @@ C
      5        IOFC   ,NNOD   ,AREA     , G      ,SHF   ,     
      6        MSC    ,DMELC  ,JSMS     , BID    ,IGTYP ,     
      7        IGMAT  ,A11R   ,GBUF%G_DT, GBUF%DT,MTN   ,
-     8        PM     ,MAT(JFT))
+     8        PM     ,MAT(JFT), IZ )
 C
       ENDIF
 C--------------------------

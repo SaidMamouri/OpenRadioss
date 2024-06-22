@@ -157,7 +157,7 @@ c
      .                              X1,X2,X3,X4,Y1,Y2,Y3,Y4,Z1,Z2,Z3,Z4,
      .                              E1X,E2X,E3X,E1Y,E2Y,E3Y,E1Z,E2Z,E3Z,
      .                              X2S,Y2S,X3S,Y3S,X4S,Y4S,
-     .                              X2L,X3L,X4L,Y2L,Y3L,Y4L
+     .                              X2L,X3L,X4L,Y2L,Y3L,Y4L,IZ
       CHARACTER*nchartitle, TITR
 c
       my_real, ALLOCATABLE, DIMENSION(:) :: DIR_A,DIR_B
@@ -291,7 +291,7 @@ C------------
      .            MSZ2C,ZPLY,ISUBSTACK,NLAY,ELBUF_STR,STACK,
      .            GBUF%THK_I,RNOISE   ,DRAPE       ,
      .            PERTURB,IX1     ,IX2      ,IX3     ,IX4     ,
-     .            IDRAPE  ,DRAPEG%INDX)
+     .            IDRAPE  ,DRAPEG%INDX , IZ)
 C-----------------------------------------------
       IF (MTN == 1 .OR. MTN == 3 .OR. MTN == 23 .OR. MTN == 91) NPT = 0
 C---------------------------
@@ -305,7 +305,7 @@ C---------------------------
      .            BUFMAT   ,IPM     ,NLAY    ,STACK%PM,ISUBSTACK,
      .            STRC(NFT+1),AREA  ,IMAT    ,IPROP   ,DTEL     , 
      .            X2L ,X3L ,X4L ,Y2L ,Y3L ,Y4L ,
-     .            STACK%IGEO ,GROUP_PARAM)
+     .            STACK%IGEO ,GROUP_PARAM, NEL , IZ)
       CALL C1BUF3(GEO,GBUF%THK,GBUF%OFF,THKE,KSH4TREE,SH4TREE)
 c---------------------------
       IF (IXFEM > 0) THEN

@@ -202,6 +202,7 @@ C--------------------------------
      .   THKE0(MVSIZ),XL2(MVSIZ),XL3(MVSIZ),XL4(MVSIZ),
      .   YL2(MVSIZ),YL3(MVSIZ),YL4(MVSIZ),FAC58(MVSIZ,2)
       my_real  BID,THKR
+      my_real, DIMENSION(MVSIZ)   :: IZ  
 C---
       INTEGER, ALLOCATABLE, DIMENSION(:) :: ELCRKINI
       my_real, 
@@ -473,7 +474,7 @@ C-----------------------------
      N       ISMSTR    ,IR        ,IS        ,NLAYER    ,NPTT    ,
      O       IXLAY     ,IXEL      ,ISUBSTACK ,STACK     ,
      P       BID       ,ITASK     ,DRAPE_SH4N  ,VARNL     ,NLOC_DMG,
-     R       INDX_DRAPE, THKE    ,SEDRAPE     ,NUMEL_DRAPE)
+     R       INDX_DRAPE, THKE    ,SEDRAPE     ,NUMEL_DRAPE , IZ )
 C-----------------------------
         IF ((ITASK==0).AND.(IMON_MAT==1)) CALL STOPTIME(35,1)
 C--------------------------
@@ -503,7 +504,7 @@ C
      5             IOFC   ,NNOD   ,AREA   , G      ,SHF   ,
      6             MSC    ,DMELC  ,JSMS   , BID    ,IGTYP ,
      7             IGMAT  ,A11R   ,GBUF%G_DT, GBUF%DT,MTN   ,
-     8             PM     ,MAT(JFT))
+     8             PM     ,MAT(JFT), IZ)
         CALL CZFINTCE(JFT  ,JLT  ,THK0 ,THK02,A_I    ,X13    ,
      2                X24  ,Y13  ,Y24  ,Z1   ,MX23   ,MX13   ,
      3                MX34 ,MY13 ,MY23 ,MY34 ,FORG   ,MOMG   ,
