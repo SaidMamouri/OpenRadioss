@@ -242,6 +242,7 @@
       use sigeps128s_mod
       use sigeps134s_mod
       use sigeps163_mod
+      use sigeps199s_mod
       use fail_spalling_s_mod
       use prop_param_mod
       use dt_mod
@@ -2092,6 +2093,14 @@
             &mfzx  ,mfzy  ,mfzz  ,ssp   ,vis   ,uvar  ,&
             &matparam%ntable,matparam   ,nvartmp,vartmp)
 !
+          elseif (mtn == 199) then !
+           call sigeps199s(mat_elem%mat_param(imat)    ,                      &
+                 &nel      , dt1              ,                               &
+                 &de1      ,de2      ,de3      ,de4      ,de5      ,de6      ,  &
+                 &so1      ,so2      ,so3      ,so4      ,so5      ,so6      ,  &
+                 &s1       ,s2       ,s3       ,s4       ,s5       ,s6       ,  &
+                 &sigy     ,defp     ,dpla     ,et       ,ssp      ,off      )  
+!              
 !----------------------------------------
           endif  ! mtn
 !=======================================================================

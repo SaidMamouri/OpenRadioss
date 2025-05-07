@@ -213,6 +213,7 @@
       use hm_read_mat134_mod
       use hm_read_mat163_mod
       use hm_read_mat169_arup_mod
+      use hm_read_mat199_mod
       use names_and_titles_mod ,only : nchartitle, ncharline
       use reader_old_mod     ,only : key0
       use multimat_param_mod ,only : m51_ssp0max,m51_lc0max,m51_tcp_ref,m51_lset_iflg6,m20_discrete_fill
@@ -1226,6 +1227,12 @@
             &pm(1,i)  ,lsubmodel,mat_id   ,titr     ,matparam   ,&
             &nvartmp ,imatvis)
 !-------
+         case ('LAW199','GINERAL')
+            ilaw  = 199
+            call hm_read_mat199(mtag     ,&
+            &matparam  ,   parmat , nuvar  ,  unitab    ,lsubmodel,&
+            &mat_id    ,titr       ,iout     )
+!------- 
           case ('GAS')
             ilaw = 999
             call hm_read_matgas(pm(1, i), ipm(1, i),mat_id, titr, key2, unitab, lsubmodel)

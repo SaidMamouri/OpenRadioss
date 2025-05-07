@@ -620,6 +620,8 @@ C     solids
       SOLMAT(151)= 1
       SOLMAT(187)= 1
       SOLMAT(190)= 1
+
+      SOLMAT(199)= 1
       SOLMAT(200)= 1
 C     shells
       COQMAT(0)  = 1
