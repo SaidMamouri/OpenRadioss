@@ -77,6 +77,7 @@
           integer ::  iplas      !< plastic strain flag       old :IPLA_D
           integer ::  ithick     !< thickness flag
           integer ::  idrill     !< drilling dof flag
+          integer ::  ithin_drape     !< flag for thinning of drape 
 ! old obsolet flags : ISTRA_D: fixed to 1,NPTS_D ,ISHEA_D : fixed to 0
         end type  shell_defaults_
 
